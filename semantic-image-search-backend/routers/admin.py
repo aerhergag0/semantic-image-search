@@ -1,12 +1,11 @@
 from typing import Union
 
 from fastapi import APIRouter
+from sentence_transformers import SentenceTransformer
 from sqlmodel import Session, select
 
 from db.db import engine
 from db.models import Images
-
-# from sentence_transformers import SentenceTransformer
 
 admin = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -55,7 +54,8 @@ async def test_insert_data():
 async def get_data(q, uploader: Union[str, None] = None):
     with Session(engine) as session:
         if uploader:
-            result = session.exec(select(Images).where(Images.filename.startswith(q), Images.uploader == uploader)).all()
+            result = session.exec(
+                select(Images).where(Images.filename.startswith(q), Images.uploader == uploader)).all()
         else:
             result = session.exec(select(Images).where(Images.filename.startswith(q))).all()
 
@@ -64,13 +64,12 @@ async def get_data(q, uploader: Union[str, None] = None):
     return {"result": str(result)}
 
 
-
 @admin.get("/get-model")
 async def get_model():
     print("Loading image and text models...")
-    # img_model = SentenceTransformer('clip-ViT-B-32')
+    img_model = SentenceTransformer('clip-ViT-B-32')
     print("img model loaded!")
-    # text_model = SentenceTransformer('sentence-transformers/clip-ViT-B-32-multilingual-v1')
+    text_model = SentenceTransformer('sentence-transformers/clip-ViT-B-32-multilingual-v1')
     print("text model loaded!")
 
     return {"message": "get model"}
