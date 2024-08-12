@@ -6,7 +6,7 @@ from sqlmodel import Session, select
 from db.db import engine
 from db.models import Images
 
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer
 
 admin = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -68,9 +68,9 @@ async def get_data(q, uploader: Union[str, None] = None):
 @admin.get("/get-model")
 async def get_model():
     print("Loading image and text models...")
-    img_model = SentenceTransformer('clip-ViT-B-32')
+    # img_model = SentenceTransformer('clip-ViT-B-32')
     print("img model loaded!")
-    text_model = SentenceTransformer('sentence-transformers/clip-ViT-B-32-multilingual-v1')
+    # text_model = SentenceTransformer('sentence-transformers/clip-ViT-B-32-multilingual-v1')
     print("text model loaded!")
 
     return {"message": "get model"}
@@ -78,5 +78,5 @@ async def get_model():
 
 @admin.get("/get-images")
 async def get_images():
-    img_path = 
-    return {"images": images}
+    # img_path =
+    return {"images"}
