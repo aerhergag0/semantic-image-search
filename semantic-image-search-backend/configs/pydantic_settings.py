@@ -6,6 +6,9 @@ class AppSettings(BaseSettings):
 
     POSTGRESQL_DB_URL: str
     FRONTEND_URL: str
+    S3_BUCKET_PATH: str
+    UPLOADS_PATH: str
+    ALLOWED_ORIGINS: str
 
 
 settings = AppSettings()

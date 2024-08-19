@@ -1,16 +1,9 @@
-import uuid
 from datetime import datetime
 from typing import Optional, Any
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import DateTime, Column, func
 from sqlmodel import SQLModel, Field
-
-
-class Test(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    value: str = Field(unique=True, index=True)
-    test_column: str = Field(default='default value')
 
 
 class Images(SQLModel, table=True):
@@ -27,7 +20,6 @@ class Images(SQLModel, table=True):
 class ImagesPublic(SQLModel):
     id: int
     filename: str
-    # embedding: Any
     link: Optional[str]
     description: Optional[str]
     uploader: Optional[str]
@@ -41,14 +33,3 @@ class ImagesCreate(SQLModel):
     link: Optional[str] = None
     description: Optional[str] = None
     uploader: Optional[str] = 'admin'
-
-
-class TestCreate(SQLModel):
-    value: str
-    test_column: Optional[str] = 'default value2'
-
-
-class TestPublic(SQLModel):
-    id: uuid.UUID
-    value: str
-    test_column: str
