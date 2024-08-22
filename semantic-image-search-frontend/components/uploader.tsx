@@ -80,7 +80,6 @@ export default function Uploader() {
 
                 fetch(`${BACKEND_API_BASE_URL}/upload`, {
                     method: 'POST',
-                    // body: file,
                     body: formData,
 
                 }).then(async (res) => {

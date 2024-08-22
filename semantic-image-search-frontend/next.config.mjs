@@ -1,5 +1,10 @@
 const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
 const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION;
+const BACKEND_API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL;
+const FRONTEND_API_BASE_URL = process.env.NEXT_PUBLIC_FRONTEND_API_BASE_URL;
+
+const BACKEND_API_HOSTNAME = new URL(BACKEND_API_BASE_URL).hostname;
+const BACKEND_API_PORT = new URL(BACKEND_API_BASE_URL).port;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -7,8 +12,8 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'http',
-                hostname: 'localhost',
-                port: '8000',
+                hostname: BACKEND_API_HOSTNAME,
+                port: BACKEND_API_PORT,
                 pathname: '/*'
             },
             {
@@ -22,7 +27,7 @@ const nextConfig = {
         return [
             {
                 source: '/:path*',
-                destination: 'http://localhost:8000/:path*'
+                destination: `${BACKEND_API_BASE_URL}/:path*`
             }
         ]
     },
