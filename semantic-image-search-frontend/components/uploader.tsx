@@ -3,7 +3,10 @@
 import {ChangeEvent, useCallback, useMemo, useState} from 'react'
 import toast from "react-hot-toast";
 import LoadingDots from "@/components/loading-dots";
-import {BACKEND_API_BASE_URL} from "@/constants";
+import {AWS_BUCKET_LINK, AWS_BUCKET_NAME, BACKEND_API_BASE_URL, s3} from "@/constants";
+import {PutObjectCommand} from "@aws-sdk/client-s3";
+import {v4 as uuidv4} from "uuid";
+import {Input} from "@nextui-org/input";
 
 
 export default function Uploader() {
@@ -52,11 +55,29 @@ export default function Uploader() {
                 setSaving(true)
 
                 const formData = new FormData();
+
+                const ext = file?.name.split(".").at(-1);
+                const uid = uuidv4().replace(/-/g, "");
+                const fileName = `${uid}${ext ? "." + ext : ""}`;
+
                 if (file) {
                     formData.append('file', file, file.name);
+                    formData.append('fileName', fileName);
+                    formData.append('link', `${AWS_BUCKET_LINK}/${fileName}`)
                 }
 
-                // fetch('/admin/upload-test-1', {
+
+                try {
+                    const uploadToS3 = new PutObjectCommand({
+                        Bucket: AWS_BUCKET_NAME,
+                        Key: `${fileName}`,
+                        Body: file!,
+                    })
+                    await s3.send(uploadToS3);
+                } catch (error) {
+                    console.error(error);
+                }
+
                 fetch(`${BACKEND_API_BASE_URL}/upload`, {
                     method: 'POST',
                     // body: file,
@@ -214,6 +235,14 @@ export default function Uploader() {
                         onChange={onChangePicture}
                     />
                 </div>
+                <Input
+                    type="text"
+                    name="description"
+                    placeholder="Enter description"
+                    className="border rounded p-2"
+                >
+
+                </Input>
             </div>
 
             <button

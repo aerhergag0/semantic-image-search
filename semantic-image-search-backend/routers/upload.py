@@ -1,13 +1,11 @@
-import io
-import os
-import uuid
+from io import BytesIO
 
+import requests
 from PIL import Image
-from fastapi import APIRouter, UploadFile, Depends
+from fastapi import APIRouter, UploadFile, Depends, Form
 from fastapi.responses import JSONResponse
 from sqlmodel import Session
 
-from configs.pydantic_settings import settings
 from db.db import engine
 from db.models import Images
 from utils.load_models import load_transformers_models
@@ -21,7 +19,10 @@ async def get_upload_page():
 
 
 @upload.post("")
-async def file_upload(file: UploadFile, models=Depends(load_transformers_models)):
+async def file_upload(file: UploadFile,
+                      file_name: str = Form(...),
+                      link: str = Form(...),
+                      models=Depends(load_transformers_models)):
     if not file:
         return JSONResponse(status_code=400, content={"message": "file is not found."})
 
@@ -30,31 +31,18 @@ async def file_upload(file: UploadFile, models=Depends(load_transformers_models)
 
     img_model, text_model = models
 
-    contents = await file.read()
-    image = Image.open(io.BytesIO(contents))
+    res = requests.get(link)
 
-    save_directory = settings.UPLOADS_PATH
-
-    file_extension = os.path.splitext(file.filename)[1]
-    unique_filename = f"{uuid.uuid4()}{file_extension}"
-    file_path = os.path.join(save_directory, unique_filename)
-
-    with open(file_path, "wb") as buffer:
-        buffer.write(contents)
-
-    to_vectorize_img_paths = [file_path]
-
-    img_embeddings = img_model.encode([Image.open(filepath) for filepath in to_vectorize_img_paths],
+    img_embeddings = img_model.encode(Image.open(BytesIO(res.content)),
                                       convert_to_tensor=True,
                                       show_progress_bar=False).squeeze().detach().numpy()
 
     data = [
         Images(
-            filename=unique_filename,
+            filename=file_name,
             embedding=img_embeddings,
-            link=settings.S3_BUCKET_PATH + "/" + unique_filename,
-            # link=file_path,
-            description="Image : " + unique_filename,
+            link=link,
+            description="This is test",
             uploader="admin"
         )
     ]

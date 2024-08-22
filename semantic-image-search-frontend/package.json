@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.633.0",
+    "@aws-sdk/s3-request-presigner": "^3.633.0",
     "@nextui-org/button": "^2.0.37",
     "@nextui-org/card": "^2.0.33",
     "@nextui-org/input": "^2.2.4",
@@ -16,6 +18,8 @@
     "@nextui-org/system": "^2.2.5",
     "@nextui-org/theme": "^2.2.9",
     "@radix-ui/react-toast": "^1.2.1",
+    "@types/uuid": "^8.3.4",
+    "aws-sdk": "^2.1678.0",
     "axios": "^1.7.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -27,7 +31,8 @@
     "react-hot-toast": "^2.4.1",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "use-debounce": "^10.0.2"
+    "use-debounce": "^10.0.2",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
