@@ -1,6 +1,6 @@
 "use client";
 
-import {ChangeEvent, useCallback, useMemo, useState} from 'react'
+import {ChangeEvent, useCallback, useMemo, useRef, useState} from 'react'
 import toast from "react-hot-toast";
 import LoadingDots from "@/components/loading-dots";
 import {AWS_BUCKET_LINK, AWS_BUCKET_NAME, BACKEND_API_BASE_URL, s3} from "@/constants";
@@ -20,13 +20,14 @@ export default function Uploader() {
     const [file, setFile] = useState<File | null>(null)
 
     const [dragActive, setDragActive] = useState(false)
+    const descriptionRef = useRef<HTMLInputElement>(null)
 
     const onChangePicture = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             const file = event.currentTarget.files && event.currentTarget.files[0]
             if (file) {
-                if (file.size / 1024 / 1024 > 50) {
-                    toast.error('File size too big (max 50MB)')
+                if (file.size / 1024 / 1024 > 5) {
+                    toast.error('File size too big (max 5MB)')
                 } else {
                     setFile(file)
                     const reader = new FileReader()
@@ -62,10 +63,12 @@ export default function Uploader() {
 
                 if (file) {
                     formData.append('file', file, file.name);
-                    formData.append('fileName', fileName);
+                    formData.append('file_name', fileName);
                     formData.append('link', `${AWS_BUCKET_LINK}/${fileName}`)
+
                 }
 
+                formData.append('description', descriptionRef.current!.value);
 
                 try {
                     const uploadToS3 = new PutObjectCommand({
@@ -85,6 +88,8 @@ export default function Uploader() {
                 }).then(async (res) => {
                     if (res.status === 200) {
                         const {url} = (await res.json()) as { url: string }
+
+
                         toast(
                             (t: { id: string }
                             ) => (
@@ -133,7 +138,7 @@ export default function Uploader() {
                 <div className="space-y-1 mb-4">
                     <h2 className="text-xl font-semibold">Upload a file</h2>
                     <p className="text-sm text-gray-500">
-                        Accepted formats: .png, .jpg, .gif, .mp4
+                        Accepted formats: .png, .jpg, .gif
                     </p>
                 </div>
                 <label
@@ -164,8 +169,8 @@ export default function Uploader() {
 
                             const file = e.dataTransfer.files && e.dataTransfer.files[0]
                             if (file) {
-                                if (file.size / 1024 / 1024 > 50) {
-                                    toast.error('File size too big (max 50MB)')
+                                if (file.size / 1024 / 1024 > 5) {
+                                    toast.error('File size too big (max 5MB)')
                                 } else {
                                     setFile(file)
                                     const reader = new FileReader()
@@ -239,6 +244,7 @@ export default function Uploader() {
                     name="description"
                     placeholder="Enter description"
                     className="border rounded p-2"
+                    ref={descriptionRef}
                 >
 
                 </Input>

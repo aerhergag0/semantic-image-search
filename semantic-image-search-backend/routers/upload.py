@@ -22,6 +22,7 @@ async def get_upload_page():
 async def file_upload(file: UploadFile,
                       file_name: str = Form(...),
                       link: str = Form(...),
+                      description: str = Form(...),
                       models=Depends(load_transformers_models)):
     if not file:
         return JSONResponse(status_code=400, content={"message": "file is not found."})
@@ -42,7 +43,7 @@ async def file_upload(file: UploadFile,
             filename=file_name,
             embedding=img_embeddings,
             link=link,
-            description="This is test",
+            description=description,
             uploader="admin"
         )
     ]
