@@ -7,7 +7,6 @@ import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Button} from "@nextui-org/button";
 import {useSharedTransition} from "@/hooks/use-shared-transition";
 import {useDebouncedCallback} from "use-debounce";
-import {FRONTEND_API_BASE_URL} from "@/constants";
 
 export default function SearchBox({
                                       query,
@@ -36,30 +35,30 @@ export default function SearchBox({
             params.delete('q');
         }
 
-        router.push(`${pathname}?${params.toString()}`);
-    }, 300);
-
-    // const resetQuery = () => {
-    //     router.push(pathname);
-    //     if (inputRef.current) {
-    //         inputRef.current.value = '';
-    //         inputRef.current.focus();
-    //     }
-    // };
+        router.replace(`${pathname}?${params.toString()}`);
+    }, 500);
 
     const resetQuery = () => {
-        startTransition && startTransition(() => {
+        router.replace(pathname);
+        if (inputRef.current) {
+            inputRef.current.value = '';
+            inputRef.current.focus();
+        }
+    };
 
-            router.push(`${FRONTEND_API_BASE_URL}/search`);
-
-            if (inputRef.current) {
-                inputRef.current.value = "";
-                inputRef.current?.focus();
-            }
-
-            // setSearchResults([]);
-        });
-    }
+    // const resetQuery = () => {
+    //     startTransition && startTransition(() => {
+    //
+    //         router.push(`${FRONTEND_API_BASE_URL}/search`);
+    //
+    //         if (inputRef.current) {
+    //             inputRef.current.value = "";
+    //             inputRef.current?.focus();
+    //         }
+    //
+    //         // setSearchResults([]);
+    //     });
+    // }
 
     return (
         <div className={"flex flex-col"}>

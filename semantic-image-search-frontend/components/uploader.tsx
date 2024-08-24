@@ -65,10 +65,14 @@ export default function Uploader() {
                     formData.append('file', file, file.name);
                     formData.append('file_name', fileName);
                     formData.append('link', `${AWS_BUCKET_LINK}/${fileName}`)
-
                 }
 
-                formData.append('description', descriptionRef.current!.value);
+                if (descriptionRef.current && descriptionRef.current.value.trim() !== "") {
+                    formData.append('description', descriptionRef.current!.value);
+                } else {
+                    formData.append('description', 'default description');
+                }
+
 
                 try {
                     const uploadToS3 = new PutObjectCommand({
@@ -88,7 +92,6 @@ export default function Uploader() {
                 }).then(async (res) => {
                     if (res.status === 200) {
                         const {url} = (await res.json()) as { url: string }
-
 
                         toast(
                             (t: { id: string }
@@ -124,7 +127,7 @@ export default function Uploader() {
                                     </button>
                                 </div>
                             ),
-                            {duration: 300000}
+                            {duration: 5000}
                         )
                     } else {
                         const error = await res.text()
@@ -216,7 +219,7 @@ export default function Uploader() {
                             Drag and drop or click to upload.
                         </p>
                         <p className="mt-2 text-center text-sm text-gray-500">
-                            Max file size: 50MB
+                            Max file size: 10MB
                         </p>
                         <span className="sr-only">Photo upload</span>
                     </div>
@@ -245,9 +248,7 @@ export default function Uploader() {
                     placeholder="Enter description"
                     className="border rounded p-2"
                     ref={descriptionRef}
-                >
-
-                </Input>
+                />
             </div>
 
             <button

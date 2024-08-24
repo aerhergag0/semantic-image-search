@@ -8,7 +8,7 @@ const config = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
-    "./node_modules/@nextui-org/theme/dist/components/(button|card|input|skeleton|ripple|spinner).js"
+    "./node_modules/@nextui-org/theme/dist/components/(button|card|input|modal|skeleton|ripple|spinner).js"
   ],
   prefix: "",
   theme: {

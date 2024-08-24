@@ -2,6 +2,8 @@ import {Card} from "@nextui-org/card";
 import {ImageSearchData} from "@/components/image-search";
 import Image from "next/image";
 import {AWS_BUCKET_LINK} from "@/constants";
+import {useDisclosure} from "@nextui-org/modal";
+import {ImageModal} from "@/components/image-modal";
 
 const formatDate = (utcDateString: string): string => {
     const date = new Date(utcDateString);
@@ -28,19 +30,25 @@ export function ImageCard({
     image: ImageSearchData;
     // similarity?: number;
 }) {
+
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+
     return (
         <Card
             key={image.id}
             className="h-[250px] md:h-[450px] relative group rounded-lg overflow-hidden"
+            isPressable
+            onPress={onOpen}
         >
+            <ImageModal isOpen={isOpen} onOpenChange={onOpenChange} imageData={image}></ImageModal>
             <div className="absolute inset-0 z-10">
                 <span className="sr-only">View image</span>
             </div>
             <Image
                 src={`${AWS_BUCKET_LINK}/${image.filename}`}
                 alt={image.filename}
-                width={300}
-                height={450}
+                fill
+                sizes={"100vw, 50vw, 33vw"}
                 priority
                 className="w-full h-full object-cover transition-transform group-hover:scale-105"
             />

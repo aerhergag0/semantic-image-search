@@ -30,6 +30,9 @@ async def file_upload(file: UploadFile,
     if not file.content_type.startswith("image"):
         return JSONResponse(status_code=400, content={"message": "file is not image."})
 
+    if description is None:
+        description = "default description"
+
     img_model, text_model = models
 
     res = requests.get(link)

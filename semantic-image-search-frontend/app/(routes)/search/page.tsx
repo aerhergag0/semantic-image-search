@@ -1,4 +1,5 @@
 import {Button} from "@nextui-org/button";
+import {ImageUp} from 'lucide-react';
 import Link from "next/link";
 import {Suspense} from "react";
 import SearchBox from "@/components/search-box";
@@ -13,6 +14,19 @@ export default function SearchPage({
 
     const query = searchParams.q;
 
+    const randomExampleMessage = () => {
+        const examples = [
+            "구름이 있는 산",
+            "비가 오는 도시",
+            "바다 위의 섬",
+            "가을 숲과 낙엽",
+            "나무 위에 앉아 있는 고양이",
+        ];
+
+        const randomIndex = Math.floor(Math.random() * examples.length);
+        return examples[randomIndex];
+    }
+
     return (
         <main className={"p-8 space-y-4"}>
             <div className="flex justify-between items-center">
@@ -20,13 +34,13 @@ export default function SearchPage({
                     <h1 className="font-semibold text-2xl">Semantic Image Search</h1>
                 </div>
                 <Link href={"/upload"}>
-                    <Button>Upload Image</Button>
+                    <Button startContent={<ImageUp/>}>Upload Image</Button>
                 </Link>
             </div>
             <div>
                 <p>
                     Try searching for something
-                    semantically, like &quot;구름이 있는 산&quot;.
+                    semantically, like &quot;{randomExampleMessage()}&quot;.
                 </p>
             </div>
 
