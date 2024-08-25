@@ -28,14 +28,26 @@ export default function Uploader() {
             if (file) {
                 if (file.size / 1024 / 1024 > 10) {
                     toast.error('File size too big (max 10MB)')
-                } else {
-                    setFile(file)
-                    const reader = new FileReader()
-                    reader.onload = (e) => {
-                        setData((prev) => ({...prev, image: e.target?.result as string}))
-                    }
-                    reader.readAsDataURL(file)
+                    return
                 }
+
+                const validTypes = ["image/jpeg", "image/png", "image/gif"];
+                if (!validTypes.includes(file.type)) {
+                    toast.error("Unsupported file format. Please upload a JPG, PNG, or GIF file.");
+                    return;
+                }
+
+                setFile(file)
+                const reader = new FileReader()
+                reader.onload = (e) => {
+                    try {
+                        setData((prev) => ({...prev, image: e.target?.result as string}))
+                    } catch (err) {
+                        console.error("Error setting image data:", err);
+                        toast.error("Error setting image data. Please try again.");
+                    }
+                }
+                reader.readAsDataURL(file)
             }
         },
         [setData]
@@ -174,17 +186,26 @@ export default function Uploader() {
                             if (file) {
                                 if (file.size / 1024 / 1024 > 10) {
                                     toast.error('File size too big (max 10MB)')
-                                } else {
-                                    setFile(file)
-                                    const reader = new FileReader()
-                                    reader.onload = (e) => {
-                                        setData((prev) => ({
-                                            ...prev,
-                                            image: e.target?.result as string,
-                                        }))
-                                    }
-                                    reader.readAsDataURL(file)
+                                    return
                                 }
+
+                                const validTypes = ["image/jpeg", "image/png", "image/gif"];
+                                if (!validTypes.includes(file.type)) {
+                                    toast.error("Unsupported file format. Please upload a JPG, PNG, or GIF file.");
+                                    return
+                                }
+
+                                setFile(file)
+                                const reader = new FileReader()
+                                reader.onload = (e) => {
+                                    try {
+                                        setData((prev) => ({...prev, image: e.target?.result as string}))
+                                    } catch (err) {
+                                        console.error("Error setting image data:", err);
+                                        toast.error("Error setting image data. Please try again.");
+                                    }
+                                }
+                                reader.readAsDataURL(file)
                             }
                         }}
                     />

@@ -1,4 +1,4 @@
-import Navbar from "@/components/navbar";
+import SemanticImageSearchNavbar from "@/components/semantic-image-search-navbar";
 
 export default function SearchPageLayout({
                                              children,
@@ -6,9 +6,9 @@ export default function SearchPageLayout({
     children: React.ReactNode;
 }) {
     return (
-        <main>
-            <Navbar/>
+        <div>
+            <SemanticImageSearchNavbar/>
             {children}
-        </main>
+        </div>
     );
 }

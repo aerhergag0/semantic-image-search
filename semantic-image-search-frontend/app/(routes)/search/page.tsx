@@ -1,6 +1,3 @@
-import {Button} from "@nextui-org/button";
-import {ImageUp} from 'lucide-react';
-import Link from "next/link";
 import {Suspense} from "react";
 import SearchBox from "@/components/search-box";
 import {CardGridSkeleton} from "@/components/card-grid-skeletion";
@@ -28,14 +25,11 @@ export default function SearchPage({
     }
 
     return (
-        <main className={"p-8 space-y-4"}>
+        <div className={"p-8 space-y-4"}>
             <div className="flex justify-between items-center">
                 <div>
                     <h1 className="font-semibold text-2xl">Semantic Image Search</h1>
                 </div>
-                <Link href={"/upload"}>
-                    <Button startContent={<ImageUp/>}>Upload Image</Button>
-                </Link>
             </div>
             <div>
                 <p>
@@ -52,6 +46,6 @@ export default function SearchPage({
                     <SuspendedImageSearch query={query}/>
                 </Suspense>
             </div>
-        </main>
+        </div>
     );
 }

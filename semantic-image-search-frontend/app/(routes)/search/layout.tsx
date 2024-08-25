@@ -1,9 +1,14 @@
+import SemanticImageSearchNavbar from "@/components/semantic-image-search-navbar";
+
 export default function SearchLayout({
-                                       children,
-                                   }: {
+                                         children,
+                                     }: {
     children: React.ReactNode
 }) {
     return (
-        <div>{children}</div>
+        <div>
+            <SemanticImageSearchNavbar/>
+            {children}
+        </div>
     )
 }

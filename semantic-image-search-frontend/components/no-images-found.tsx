@@ -6,7 +6,7 @@ export function NoImagesFound({query}: { query: string }) {
                     No images found
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                    There were no results (semantic or direct) found for the query &apos;
+                    There were no results found for the query &apos;
                     {query}&apos;.
                 </p>
             </div>

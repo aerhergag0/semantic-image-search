@@ -32,4 +32,4 @@ class ImagesCreate(SQLModel):
     embedding: Any
     link: Optional[str] = None
     description: Optional[str] = None
-    uploader: Optional[str] = 'admin'
+    uploader: Optional[str] = 'Guest'

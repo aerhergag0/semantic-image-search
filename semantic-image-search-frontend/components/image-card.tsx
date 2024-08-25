@@ -1,11 +1,10 @@
 import {Card} from "@nextui-org/card";
 import {ImageSearchData} from "@/components/image-search";
 import Image from "next/image";
-import {AWS_BUCKET_LINK} from "@/constants";
 import {useDisclosure} from "@nextui-org/modal";
 import {ImageModal} from "@/components/image-modal";
 
-const formatDate = (utcDateString: string): string => {
+export const formatDate = (utcDateString: string): string => {
     const date = new Date(utcDateString);
     const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
 
@@ -45,7 +44,7 @@ export function ImageCard({
                 <span className="sr-only">View image</span>
             </div>
             <Image
-                src={`${AWS_BUCKET_LINK}/${image.filename}`}
+                src={image.link}
                 alt={image.filename}
                 fill
                 sizes={"100vw, 50vw, 33vw"}
