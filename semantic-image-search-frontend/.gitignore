@@ -38,3 +38,4 @@ next-env.d.ts
 .env
 .idea
 /public/s3
+app/(routes)/(tests)
