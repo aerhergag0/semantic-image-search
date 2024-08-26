@@ -9,7 +9,7 @@ export default function UploadPage() {
                 Upload Image
             </h1>
             <div
-                className="bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full">
+                className="bg-white/30 p-12 ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full">
                 <Uploader/>
             </div>
         </div>

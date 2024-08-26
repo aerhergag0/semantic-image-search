@@ -1,3 +1,4 @@
 /db
 /s3
 /.idea
+/deploy.sh
