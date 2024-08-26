@@ -24,10 +24,7 @@ jobs:
           port: ${{secrets.REMOTE_SSH_PORT}}
           script: |
             cd semantic-image-search
-            git pull origin main
-            cd semantic-image-search-backend
-            nohup uvicorn api.main:app --host 0.0.0.0 --port 8000 > backend.log 2>&1 &
-            echo "Deployment completed successfully."
+            run ./deploy.sh
             
       
       
