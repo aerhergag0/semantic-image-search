@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  backend:
+  deploy:
     runs-on: ubuntu-22.04
     steps:
       - name: Check out code
@@ -24,7 +24,7 @@ jobs:
           port: ${{secrets.REMOTE_SSH_PORT}}
           script: |
             cd semantic-image-search
-            run ./deploy.sh
+            ./deploy.sh
             
       
       
