@@ -47,7 +47,7 @@ async def file_upload(file: UploadFile,
             embedding=img_embeddings,
             link=link,
             description=description,
-            uploader="admin"
+            uploader="Guest"
         )
     ]
 
