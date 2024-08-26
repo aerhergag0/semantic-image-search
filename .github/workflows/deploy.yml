@@ -24,6 +24,12 @@ jobs:
         uses: actions/setup-node@v4.0.3
         with:
           node-version: '20'
+
+      - name: Update npm to latest version
+        run: npm install -g npm@10.8.2
+
+      - name: npm i sharp
+        run: npm i sharp
           
       - name: deploy to NCP App
         uses: appleboy/ssh-action@master
@@ -34,7 +40,6 @@ jobs:
           port: ${{secrets.REMOTE_SSH_PORT}}
           script: |
             cd semantic-image-search
-            npm --version
             ./deploy.sh
             
       
