@@ -1,5 +1,5 @@
 name: deploy
-run-name: auto deploy
+run-name: auto deployment
 on:
   push:
     branches:
