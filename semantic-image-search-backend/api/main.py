@@ -9,7 +9,7 @@ from routers.search import search
 from routers.upload import upload
 from utils.load_models import load_transformers_models
 
-app = FastAPI()
+app = FastAPI(docs_url=None, redoc_url=None)
 app.include_router(search)
 app.include_router(upload)
 app.include_router(admin)

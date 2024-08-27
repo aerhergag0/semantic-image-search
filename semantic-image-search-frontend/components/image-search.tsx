@@ -16,6 +16,7 @@ export interface ImageSearchData {
     uploader: string;
     uploaded_at: string;
     updated_at: string;
+    distance: number;
 }
 
 export const ImageSearch = ({

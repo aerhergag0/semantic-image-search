@@ -25,6 +25,7 @@ class ImagesPublic(SQLModel):
     uploader: Optional[str]
     uploaded_at: datetime
     updated_at: Optional[datetime]
+    distance: Optional[float]
 
 
 class ImagesCreate(SQLModel):

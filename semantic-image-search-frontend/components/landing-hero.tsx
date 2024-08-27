@@ -7,12 +7,12 @@ export default function LandingHero() {
             <div className={"text-4xl sm:text-5xl md:text-6xl lg:text-7xl space-y-5 font-extrabold"}>
                 <h1>Semantic Image Search</h1>
             </div>
-            <div>
-                Searching for images using natural language has never been easier.
+            <div className={"text-lg sm:text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto"}>
+                Find images using only text!
             </div>
-            <div className={"flex justify-center space-x-4"}>
+            <div className={"flex justify-center space-x-4 mt-8"}>
                 <Link href={"/search"}>
-                    <Button variant={"solid"} className={"md:text-lg p-4 md:p-6 rounded-full font-semibold w-40"}>
+                    <Button variant={"solid"} className={"bg-gradient-to-b from-blue-500 to-purple-600 text-white md:text-lg p-4 md:p-6 rounded-full font-semibold w-40"}>
                         Search Now
                     </Button>
                 </Link>

@@ -66,6 +66,10 @@ export const ImageModal = ({
                                         <strong className="text-gray-700 font-semibold">Uploaded Time:</strong>
                                         <span className="ml-2 text-gray-600">{formatDate(imageData.uploaded_at)}</span>
                                     </div>
+                                    <div className="mb-4">
+                                        <strong className="text-gray-700 font-semibold">Similarity Score:</strong>
+                                        <span className="ml-2 text-gray-600">{1 - (imageData.distance)}</span>
+                                    </div>
                                 </div>
                             </div>
                         </ModalBody>
