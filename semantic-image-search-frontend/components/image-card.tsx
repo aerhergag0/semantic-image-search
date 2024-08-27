@@ -3,6 +3,7 @@ import {ImageSearchData} from "@/components/image-search";
 import Image from "next/image";
 import {useDisclosure} from "@nextui-org/modal";
 import {ImageModal} from "@/components/image-modal";
+import {Chip} from "@nextui-org/chip";
 
 export const formatDate = (utcDateString: string): string => {
     const date = new Date(utcDateString);
@@ -23,11 +24,9 @@ export const formatDate = (utcDateString: string): string => {
 
 
 export function ImageCard({
-                              image,
-                              // similarity,
+                              image
                           }: {
     image: ImageSearchData;
-    // similarity?: number;
 }) {
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
@@ -61,14 +60,11 @@ export function ImageCard({
                     Uploaded by {image.uploader} on {formatDate(image.uploaded_at)}
                 </p>
             </div>
-            {/*{similarity ? (*/}
-            {/*    <div className="py-2 z-10 absolute bottom-2 left-2">*/}
-            {/*        <MatchBadge*/}
-            {/*            type={similarity === 1 ? "direct" : "semantic"}*/}
-            {/*            similarity={similarity}*/}
-            {/*        />*/}
-            {/*    </div>*/}
-            {/*) : null}*/}
+            {(1 - image.distance) < 0.26 ?
+                <div className={"p-2"}>
+                    <Chip color={"warning"}>Low Similarity</Chip>
+                </div>
+                : null}
         </Card>
     );
 }
