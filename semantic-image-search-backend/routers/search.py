@@ -3,7 +3,7 @@ from select import select
 from sqlmodel import Session, select
 
 from db.db import engine
-from db.models import Images, ImagesPublic, ImagesPublic2
+from db.models import Images, ImagesPublic
 from utils.load_models import load_transformers_models
 
 search = APIRouter(prefix="/search", tags=["search"])
