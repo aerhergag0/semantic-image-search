@@ -20,8 +20,7 @@ export interface ImageSearchData {
 }
 
 export const ImageSearch = ({
-                                // images,
-                                // query,
+
                             }: {
     images: ImageSearchData[];
     query?: string;
@@ -39,11 +38,6 @@ export const ImageSearch = ({
                     `${BACKEND_API_BASE_URL}/search?q=${searchQuery}`,
                     {cache: "force-cache"}
                 );
-
-                if (!response.ok) {
-                    throw new Error("An error occurred while fetching the data");
-                }
-
                 const data = await response.json();
                 setImages(data);
             } catch (err) {
@@ -56,7 +50,7 @@ export const ImageSearch = ({
         };
 
         fetchData();
-    }, []);
+    }, [searchQuery]);
 
     if (isPending) return <CardGridSkeleton/>;
 
@@ -74,7 +68,6 @@ const ImageGrid = ({images}: { images: ImageSearchData[] }) => {
                 <ImageCard
                     key={"image_" + image.id}
                     image={image}
-                    // similarity={image.similarity}
                 />
             ))}
         </div>

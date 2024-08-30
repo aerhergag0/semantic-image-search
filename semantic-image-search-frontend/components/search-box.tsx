@@ -35,30 +35,11 @@ export default function SearchBox({
             params.delete('q');
         }
 
-        router.replace(`${pathname}?${params.toString()}`);
+        startTransition &&
+        startTransition(() => {
+            router.replace(`${pathname}?${params.toString()}`);
+        });
     }, 500);
-
-    const resetQuery = () => {
-        router.replace(pathname);
-        if (inputRef.current) {
-            inputRef.current.value = '';
-            inputRef.current.focus();
-        }
-    };
-
-    // const resetQuery = () => {
-    //     startTransition && startTransition(() => {
-    //
-    //         router.push(`${FRONTEND_API_BASE_URL}/search`);
-    //
-    //         if (inputRef.current) {
-    //             inputRef.current.value = "";
-    //             inputRef.current?.focus();
-    //         }
-    //
-    //         // setSearchResults([]);
-    //     });
-    // }
 
     return (
         <div className={"flex flex-col"}>
@@ -74,6 +55,7 @@ export default function SearchBox({
 
                             onChange={(e) => {
                                 const newValue = e.target.value;
+
                                 if (newValue.length > 0) {
                                     setIsValid(true);
                                     handleSearch(newValue);
@@ -89,17 +71,6 @@ export default function SearchBox({
                             className={"text-base w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:ring-blue-500"}
                             placeholder={"Input Search Query"}
                         />
-                        {q.length > 0 ? (
-                            <Button
-                                className="absolute right-2 text-gray-400 rounded-full h-8 w-8"
-                                variant="ghost"
-                                type="reset"
-                                size="sm"
-                                onClick={resetQuery}
-                            >
-                                <X height={20} width={20}/>
-                            </Button>
-                        ) : null}
                     </div>
                 </div>
                 {!isValid ? (

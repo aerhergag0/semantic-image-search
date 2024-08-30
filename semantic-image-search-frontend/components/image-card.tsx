@@ -24,8 +24,8 @@ export const formatDate = (utcDateString: string): string => {
 
 
 export function ImageCard({
-                              image
-                          }: {
+    image
+}: {
     image: ImageSearchData;
 }) {
 
