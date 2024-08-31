@@ -1,3 +1,5 @@
+import logging
+
 from sqlalchemy import create_engine
 from sqlmodel import SQLModel
 
@@ -9,4 +11,8 @@ engine = create_engine(DATABASE_URL)
 
 
 def create_db_and_tables():
-    SQLModel.metadata.create_all(engine)
+    try:
+        SQLModel.metadata.create_all(engine)
+    except Exception as e:
+        logging.error(f"An error occurred while create db: {e}")
+        raise

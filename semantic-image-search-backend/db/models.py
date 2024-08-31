@@ -14,7 +14,9 @@ class Images(SQLModel, table=True):
     description: Optional[str] = Field(default=None)
     uploader: Optional[str] = Field(default=None)
     uploaded_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: Optional[datetime] = Field(sa_column=Column(DateTime(), onupdate=func.now()))
+    updated_at: Optional[datetime] = Field(
+        sa_column=Column(DateTime(), onupdate=func.now())
+    )
 
 
 class ImagesPublic(SQLModel):
@@ -33,4 +35,4 @@ class ImagesCreate(SQLModel):
     embedding: Any
     link: Optional[str] = None
     description: Optional[str] = None
-    uploader: Optional[str] = 'Guest'
+    uploader: Optional[str] = "Guest"
