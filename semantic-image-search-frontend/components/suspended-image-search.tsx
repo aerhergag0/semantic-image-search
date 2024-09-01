@@ -8,5 +8,5 @@ export const SuspendedImageSearch = async ({query}: { query?: string }) => {
         return <ErrorComponent error={error}/>;
     }
 
-    return <ImageSearch images={images} query={query}/>;
+    return <ImageSearch data={images} query={query}/>;
 };

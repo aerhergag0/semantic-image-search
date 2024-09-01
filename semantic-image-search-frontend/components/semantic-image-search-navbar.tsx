@@ -31,7 +31,6 @@ export default function SemanticImageSearchNavbar() {
     return (
         <Navbar
             onMenuOpenChange={setIsMenuOpen}
-            position={"static"}
             isBordered
             className={"bg-black"}
             maxWidth={"full"}

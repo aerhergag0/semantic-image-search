@@ -12,7 +12,8 @@ export default function LandingHero() {
             </div>
             <div className={"flex justify-center space-x-4 mt-8"}>
                 <Link href={"/search"}>
-                    <Button variant={"solid"} className={"bg-gradient-to-b from-blue-500 to-purple-600 text-white md:text-lg p-4 md:p-6 rounded-full font-semibold w-40"}>
+                    <Button variant={"solid"}
+                            className={"bg-gradient-to-b from-blue-500 to-purple-600 text-white md:text-lg p-4 md:p-6 rounded-full font-semibold w-40"}>
                         Search Now
                     </Button>
                 </Link>
@@ -22,6 +23,14 @@ export default function LandingHero() {
                         Upload Image
                     </Button>
                 </Link>
+            </div>
+            <div className={"text-sm sm:text-base text-gray-400 mt-12"}>
+                <p>This site was created for educational purposes.</p>
+                <p>This site was created based on the following site: <a href="https://semantic-image-search.vercel.app"
+                                                                      className={"text-blue-300 underline"}
+                                                                      target="_blank"
+                                                                      rel="noopener noreferrer">https://semantic-image-search.vercel.app</a>
+                </p>
             </div>
         </div>
     );
