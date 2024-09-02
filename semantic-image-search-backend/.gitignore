@@ -1,4 +1,5 @@
 .idea
 .venv
 .env
-/routers/admin.py
+
+./routers/admin.py
