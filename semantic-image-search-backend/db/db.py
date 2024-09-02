@@ -1,7 +1,7 @@
 import logging
 
 from sqlalchemy import create_engine
-from sqlmodel import SQLModel
+from sqlmodel import SQLModel, Session
 
 from configs.pydantic_settings import settings
 
@@ -16,3 +16,8 @@ def create_db_and_tables():
     except Exception as e:
         logging.error(f"An error occurred while create db: {e}")
         raise
+
+
+def get_db_session():
+    with Session(engine) as session:
+        yield session

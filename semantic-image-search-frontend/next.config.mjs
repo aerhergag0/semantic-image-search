@@ -9,6 +9,7 @@ const BACKEND_API_PORT = new URL(BACKEND_API_BASE_URL).port;
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
+        unoptimized: true,
         remotePatterns: [
             {
                 protocol: 'http',
