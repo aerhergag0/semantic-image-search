@@ -1,4 +1,8 @@
 /db
 /s3
 /.idea
+
 /deploy.sh
+docker-compose.yml
+
+/semantic-image-search-backend/routers/admin.py

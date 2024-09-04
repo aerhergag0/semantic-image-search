@@ -2,6 +2,7 @@ import {Suspense} from "react";
 import SearchBox from "@/components/search-box";
 import {CardGridSkeleton} from "@/components/card-grid-skeletion";
 import {SuspendedImageSearch} from "@/components/suspended-image-search";
+import {Toaster} from "react-hot-toast";
 
 export default function SearchPage({
                                        searchParams,
@@ -25,26 +26,29 @@ export default function SearchPage({
     }
 
     return (
-        <div className={"p-8 space-y-4"}>
-            <div className="flex justify-between items-center">
+        <div>
+            <Toaster/>
+            <div className={"p-8 space-y-4"}>
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="font-semibold text-2xl">Semantic Image Search</h1>
+                    </div>
+                </div>
                 <div>
-                    <h1 className="font-semibold text-2xl">Semantic Image Search</h1>
+                    <p>
+                        Try searching for something
+                        semantically, like &quot;{randomExampleMessage()}&quot;.
+                    </p>
                 </div>
-            </div>
-            <div>
-                <p>
-                    Try searching for something
-                    semantically, like &quot;{randomExampleMessage()}&quot;.
-                </p>
-            </div>
 
-            <div className="">
-                <div className="pt-2">
-                    <SearchBox query={query}/>
+                <div className="">
+                    <div className="pt-2">
+                        <SearchBox query={query}/>
+                    </div>
+                    <Suspense fallback={<CardGridSkeleton/>} key={query}>
+                        <SuspendedImageSearch query={query}/>
+                    </Suspense>
                 </div>
-                <Suspense fallback={<CardGridSkeleton/>} key={query}>
-                    <SuspendedImageSearch query={query}/>
-                </Suspense>
             </div>
         </div>
     );

@@ -1,10 +1,14 @@
+"use client";
+
 import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
 import {Button} from "@nextui-org/button";
-import {Download, Info} from 'lucide-react';
+import {Download, Info, Siren} from 'lucide-react';
 import Image from "next/image";
 import {ImageSearchData} from "@/components/image-search";
 import {formatDate} from "@/components/image-card";
 import Link from "next/link";
+import {useState} from "react";
+import ReportForm from "@/components/report-form";
 
 export type ImageModalProps = {
     isOpen: boolean;
@@ -13,19 +17,24 @@ export type ImageModalProps = {
 }
 
 export const ImageModal = ({
-    isOpen,
-    onOpenChange,
-    imageData
+   isOpen,
+   onOpenChange,
+   imageData
 }: ImageModalProps) => {
 
+    const [isReportFormVisible, setIsReportFormVisible] = useState(false);
+
+    const handleReportButtonClick = () => {
+        setIsReportFormVisible(!isReportFormVisible);
+    };
 
     return (
         <Modal
-            size={"2xl"}
+            size={"3xl"}
             isOpen={isOpen}
             onOpenChange={onOpenChange}
             placement={"center"}
-            scrollBehavior={"inside"}
+            scrollBehavior={"outside"}
         >
             <ModalContent>
                 {(onClose) => (
@@ -50,30 +59,33 @@ export const ImageModal = ({
                                 </div>
 
                                 <div className="w-full md:w-[40%] bg-gray-50 p-4 rounded-lg order-2 md:order-none">
-                                    <div className="mb-4">
-                                        <strong className="text-gray-700 font-semibold">Filename:</strong>
-                                        <span className="ml-2 text-gray-600">{imageData.filename}</span>
-                                    </div>
-                                    <div className="mb-4">
-                                        <strong className="text-gray-700 font-semibold">Description:</strong>
-                                        <span className="ml-2 text-gray-600">{imageData.description}</span>
-                                    </div>
-                                    <div className="mb-4">
-                                        <strong className="text-gray-700 font-semibold">Uploader:</strong>
-                                        <span className="ml-2 text-gray-600">{imageData.uploader}</span>
-                                    </div>
-                                    <div className="mb-4">
-                                        <strong className="text-gray-700 font-semibold">Uploaded Time:</strong>
-                                        <span className="ml-2 text-gray-600">{formatDate(imageData.uploaded_at)}</span>
-                                    </div>
-                                    <div className="mb-4">
-                                        <strong className="text-gray-700 font-semibold">Similarity Score:</strong>
-                                        <span className="ml-2 text-gray-600">{1 - (imageData.distance)}</span>
+                                    <div className="space-y-3">
+                                        {[
+                                            {label: "Filename:", value: imageData.filename},
+                                            {label: "Description:", value: imageData.description},
+                                            {label: "Uploader:", value: imageData.uploader},
+                                            {label: "Uploaded Time:", value: formatDate(imageData.uploaded_at)},
+                                            {label: "Similarity Score:", value: (1 - imageData.distance).toFixed(10)}
+                                        ].map((item, index) => (
+                                            <div key={index} className="grid grid-cols-2 gap-4">
+                                                <strong className="text-gray-700 font-semibold">{item.label}</strong>
+                                                <span className="text-gray-600 ">{item.value}</span>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
+
+                            {isReportFormVisible && (
+                                <ReportForm imageData={imageData}/>
+                            )}
                         </ModalBody>
                         <ModalFooter>
+                            <Button color="danger" isIconOnly onPress={handleReportButtonClick}
+                                    className="hover:bg-red-200 rounded-lg transition duration-300"
+                            >
+                                <Siren/>
+                            </Button>
                             <Link href={imageData.link}>
                                 <Button startContent={<Download/>} color="primary"
                                         className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
