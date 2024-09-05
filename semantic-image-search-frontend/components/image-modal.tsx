@@ -30,7 +30,7 @@ export const ImageModal = ({
 
     return (
         <Modal
-            size={"3xl"}
+            size={"2xl"}
             isOpen={isOpen}
             onOpenChange={onOpenChange}
             placement={"center"}

@@ -6,9 +6,10 @@ import {useSharedTransition} from "@/hooks/use-shared-transition";
 import {CardGridSkeleton} from "@/components/card-grid-skeletion";
 import {NoImagesFound} from "@/components/no-images-found";
 import {useSearchParams} from "next/navigation";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {Button} from "@nextui-org/button";
 import ScrollToTopButton from "@/components/scroll-to-top-button";
+import LoadingDots from "@/components/loading-dots";
 
 export interface ImageSearchData {
     id: string;
@@ -41,7 +42,7 @@ export const ImageSearch = ({}: {
     const [hasMore, setHasMore] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
 
-    const fetchData = async (pageNum: number) => {
+    const fetchData = useCallback(async (pageNum: number) => {
         setIsLoading(true);
         try {
             const response = await fetch(
@@ -50,40 +51,33 @@ export const ImageSearch = ({}: {
             );
             const data: SearchResponse = await response.json();
 
-            if (Array.isArray(data.images)) {
-                if (pageNum === 1) {
-                    setImages(data.images);
-                } else {
-                    setImages((prevImages) => [...prevImages, ...data.images]);
-                }
-
-                setHasMore(data.has_next);
-                setPage(data.page);
-            } else {
-                console.error("Received data is not in the expected format:", data);
-                setImages([]);
-                setHasMore(false);
+            if (!Array.isArray(data.images)) {
+                console.error("Received data is not in the expected format");
             }
 
+            setImages(prevImages => pageNum === 1 ? data.images : [...prevImages, ...data.images]);
+            setHasMore(data.has_next);
+            setPage(data.page);
         } catch (err) {
-            if (err instanceof Error) {
-                console.error(err.message);
-            } else {
-                console.error("An unknown error has occurred");
-            }
+            console.error("Error fetching data:", err);
+            setImages([]);
+            setHasMore(false);
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [searchQuery]);
 
     useEffect(() => {
         setPage(1);
-        fetchData(1)
-    }, [searchQuery]);
+        setImages([]);
+        fetchData(1).catch((err) => console.error(err));
+    }, [searchQuery, fetchData]);
 
-    const handleLoadMore = async () => {
-        fetchData(page + 1);
-    };
+    const handleLoadMore = () => {
+        if (!isLoading && hasMore) {
+            fetchData(page + 1).catch((err) => console.error(err));
+        }
+    }
 
 
     if (isPending) return <CardGridSkeleton/>;
@@ -98,7 +92,7 @@ export const ImageSearch = ({}: {
             {hasMore && (
                 <div className="mt-4 text-center">
                     <Button onClick={handleLoadMore} disabled={isLoading}>
-                        {isLoading ? "loading.." : "Load More"}
+                        {isLoading ? <LoadingDots color="#808080"/> : "Load More"}
                     </Button>
                 </div>
             )}

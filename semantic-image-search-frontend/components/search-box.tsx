@@ -4,14 +4,13 @@ import {SearchIcon, X} from "lucide-react";
 import {Input} from "@nextui-org/input";
 import {useRef, useState} from "react";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {Button} from "@nextui-org/button";
 import {useSharedTransition} from "@/hooks/use-shared-transition";
 import {useDebouncedCallback} from "use-debounce";
 
 export default function SearchBox({
-                                      query,
-                                      disabled,
-                                  }: {
+    query,
+    disabled,
+}: {
     query?: string | null;
     disabled?: boolean;
 }) {
