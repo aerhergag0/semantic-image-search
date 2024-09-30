@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends, Query
+from pgvector.sqlalchemy import Vector
 from select import select
+from sqlalchemy import literal, literal_column, cast
 from sqlmodel import Session, select
 
 from db.db import get_db_session
@@ -29,6 +31,11 @@ async def search_image(
     items_per_page = 12
     offset = (page - 1) * items_per_page
 
+    query_vector_cte = (
+        select(cast(query_embedding, Vector(512)).label("vt"))
+        .cte("data")
+    )
+
     search_stmt = (
         select(
             Images.id,
@@ -38,9 +45,11 @@ async def search_image(
             Images.uploader,
             Images.uploaded_at,
             Images.updated_at,
-            (Images.embedding.cosine_distance(query_embedding)).label("distance"),
+            (1 - Images.embedding.cosine_distance(literal_column("vt"))).label("distance"),
         )
-        .order_by(Images.embedding.cosine_distance(query_embedding))
+        .select_from(Images)
+        .join(query_vector_cte, literal(1) == literal(1))
+        .order_by(Images.embedding.cosine_distance(literal_column("vt")))
         .offset(offset)
         .limit(items_per_page)
     )

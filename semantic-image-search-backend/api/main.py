@@ -24,6 +24,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# logging.basicConfig()
+# logger = logging.getLogger('sqlalchemy.engine')
+# logger.setLevel(logging.DEBUG)
+
 
 @app.on_event("startup")
 def on_startup():
