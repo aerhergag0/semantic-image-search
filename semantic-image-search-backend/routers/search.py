@@ -45,7 +45,7 @@ async def search_image(
             Images.uploader,
             Images.uploaded_at,
             Images.updated_at,
-            (1 - Images.embedding.cosine_distance(literal_column("vt"))).label("distance"),
+            Images.embedding.cosine_distance(literal_column("vt")).label("distance"),
         )
         .select_from(Images)
         .join(query_vector_cte, literal(1) == literal(1))
