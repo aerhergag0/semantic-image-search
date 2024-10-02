@@ -12,7 +12,7 @@ jobs:
   deploy:
     runs-on: ubuntu-22.04
     steps:
-      - name: deploy to NCP App
+      - name: deploy to azure
         uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.REMOTE_IP}}
@@ -20,7 +20,7 @@ jobs:
           password: ${{secrets.REMOTE_SSH_KEY}}
           port: ${{secrets.REMOTE_SSH_PORT}}
           script: |
-            cd semantic-image-search
+            cd projects/semantic-image-search
             ./deploy.sh
             
       
