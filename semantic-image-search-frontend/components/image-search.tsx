@@ -47,7 +47,13 @@ export const ImageSearch = ({}: {
         try {
             const response = await fetch(
                 `${BACKEND_API_BASE_URL}/search?q=${searchQuery}&page=${pageNum}`,
-                {cache: "force-cache"}
+                {
+                    cache: "force-cache",
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
             );
             const data: SearchResponse = await response.json();
 

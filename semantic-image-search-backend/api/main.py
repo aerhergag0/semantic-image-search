@@ -1,9 +1,9 @@
 import logging
 
+from configs.pydantic_settings import settings
+from db.db import create_db_and_tables
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from db.db import create_db_and_tables
 from routers.report import report
 from routers.search import search
 from routers.upload import upload
@@ -16,11 +16,12 @@ app.include_router(report)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # logging.basicConfig()
 # logger = logging.getLogger('sqlalchemy.engine')

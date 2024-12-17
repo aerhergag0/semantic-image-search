@@ -10,5 +10,9 @@ class AppSettings(BaseSettings):
     UPLOADS_PATH: str
     ALLOWED_ORIGINS: str
 
+    @property
+    def origins(self) -> list[str]:
+        return self.ALLOWED_ORIGINS.split(',')
+
 
 settings = AppSettings()

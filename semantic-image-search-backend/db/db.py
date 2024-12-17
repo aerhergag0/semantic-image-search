@@ -1,9 +1,8 @@
 import logging
 
+from configs.pydantic_settings import settings
 from sqlalchemy import create_engine
 from sqlmodel import SQLModel, Session
-
-from configs.pydantic_settings import settings
 
 DATABASE_URL = settings.POSTGRESQL_DB_URL
 

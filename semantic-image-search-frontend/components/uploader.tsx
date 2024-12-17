@@ -100,6 +100,7 @@ export default function Uploader() {
 
                 fetch(`${BACKEND_API_BASE_URL}/upload`, {
                     method: 'POST',
+                    credentials: 'include',
                     body: formData,
 
                 }).then(async (res) => {

@@ -1,9 +1,8 @@
+from db.db import get_db_session
+from db.models import Reports, ReportCreate, ReportStatus
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from sqlmodel import Session
-
-from db.db import get_db_session
-from db.models import Reports, ReportCreate, ReportStatus
 
 report = APIRouter(prefix="/report", tags=["report"])
 

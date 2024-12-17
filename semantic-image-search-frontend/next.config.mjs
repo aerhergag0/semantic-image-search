@@ -18,6 +18,12 @@ const nextConfig = {
                 pathname: '/*'
             },
             {
+                protocol: 'https',
+                hostname: BACKEND_API_HOSTNAME,
+                port: BACKEND_API_PORT,
+                pathname: '/*'
+            },
+            {
                 protocol: "https",
                 hostname: `${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com`,
                 pathname: '/*'

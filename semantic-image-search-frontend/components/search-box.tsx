@@ -1,6 +1,6 @@
 "use client";
 
-import {SearchIcon, X} from "lucide-react";
+import {SearchIcon} from "lucide-react";
 import {Input} from "@nextui-org/input";
 import {useRef, useState} from "react";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";

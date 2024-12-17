@@ -1,11 +1,10 @@
+from db.db import get_db_session
+from db.models import Images, ImagesPublic
 from fastapi import APIRouter, Depends, Query
 from pgvector.sqlalchemy import Vector
 from select import select
 from sqlalchemy import literal, literal_column, cast
 from sqlmodel import Session, select
-
-from db.db import get_db_session
-from db.models import Images, ImagesPublic
 from utils.load_models import load_transformers_models
 
 search = APIRouter(prefix="/search", tags=["search"])
@@ -13,12 +12,11 @@ search = APIRouter(prefix="/search", tags=["search"])
 
 @search.get("")
 async def search_image(
-    q: str,
-    page: int = Query(1, ge=1),
-    models=Depends(load_transformers_models),
-    session: Session = Depends(get_db_session),
+        q: str,
+        page: int = Query(1, ge=1),
+        models=Depends(load_transformers_models),
+        session: Session = Depends(get_db_session),
 ):
-
     img_model, text_model = models
 
     query_embedding = (

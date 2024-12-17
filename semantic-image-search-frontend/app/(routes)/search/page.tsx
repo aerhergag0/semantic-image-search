@@ -5,8 +5,8 @@ import {SuspendedImageSearch} from "@/components/suspended-image-search";
 import {Toaster} from "react-hot-toast";
 
 export default function SearchPage({
-                                       searchParams,
-                                   }: {
+    searchParams,
+}: {
     searchParams: { q?: string };
 }) {
 

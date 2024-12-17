@@ -17,9 +17,9 @@ export type ImageModalProps = {
 }
 
 export const ImageModal = ({
-   isOpen,
-   onOpenChange,
-   imageData
+    isOpen,
+    onOpenChange,
+    imageData
 }: ImageModalProps) => {
 
     const [isReportFormVisible, setIsReportFormVisible] = useState(false);

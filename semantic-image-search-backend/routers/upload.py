@@ -3,12 +3,11 @@ from io import BytesIO
 
 import requests
 from PIL import Image
+from db.db import get_db_session
+from db.models import Images
 from fastapi import APIRouter, UploadFile, Depends, Form, HTTPException
 from fastapi.responses import JSONResponse
 from sqlmodel import Session
-
-from db.db import get_db_session
-from db.models import Images
 from utils.load_models import load_transformers_models
 
 upload = APIRouter(prefix="/upload", tags=["upload"])
@@ -21,12 +20,12 @@ async def get_upload_page():
 
 @upload.post("")
 async def file_upload(
-    file: UploadFile,
-    file_name: str = Form(...),
-    link: str = Form(...),
-    description: str = Form(...),
-    models=Depends(load_transformers_models),
-    session: Session = Depends(get_db_session),
+        file: UploadFile,
+        file_name: str = Form(...),
+        link: str = Form(...),
+        description: str = Form(...),
+        models=Depends(load_transformers_models),
+        session: Session = Depends(get_db_session),
 ):
     if not file:
         return JSONResponse(
@@ -55,7 +54,6 @@ async def file_upload(
         raise HTTPException(
             status_code=500, detail=f"Failed to fetch image from link: {str(e)}"
         )
-
 
     try:
         img_embeddings = (

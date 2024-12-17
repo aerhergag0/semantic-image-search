@@ -9,8 +9,8 @@ const defaultValue: {
 const TransitionContext = createContext(defaultValue);
 
 export const TransitionProvider = ({
-                                       children,
-                                   }: {
+    children,
+}: {
     children: React.ReactNode;
 }) => {
     const [isPending, startTransition] = useTransition();

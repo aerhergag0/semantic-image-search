@@ -1,6 +1,6 @@
 export default function LandingLayout({
-                                          children
-                                      }: {
+    children
+}: {
     children: React.ReactNode;
 }) {
     return (
