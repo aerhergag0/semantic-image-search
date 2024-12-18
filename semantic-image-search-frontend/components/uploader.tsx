@@ -102,7 +102,9 @@ export default function Uploader() {
                     method: 'POST',
                     credentials: 'include',
                     body: formData,
-
+                    headers: {
+                        'ngrok-skip-browser-warning': '69420'
+                    }
                 }).then(async (res) => {
                     if (res.status === 200) {
                         const {url} = (await res.json()) as { url: string }
