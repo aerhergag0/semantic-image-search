@@ -32,9 +32,9 @@ app.add_middleware(
 )
 
 
-# logging.basicConfig()
-# logger = logging.getLogger('sqlalchemy.engine')
-# logger.setLevel(logging.DEBUG)
+logging.basicConfig()
+logger = logging.getLogger('sqlalchemy.engine')
+logger.setLevel(logging.DEBUG)
 
 
 @app.on_event("startup")

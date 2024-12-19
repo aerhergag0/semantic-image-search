@@ -3,7 +3,7 @@ from db.models import Images, ImagesPublic
 from fastapi import APIRouter, Depends, Query
 from pgvector.sqlalchemy import Vector
 from select import select
-from sqlalchemy import literal, literal_column, cast
+from sqlalchemy import literal, literal_column, cast, func
 from sqlmodel import Session, select
 from utils.load_models import load_transformers_models
 
@@ -34,6 +34,12 @@ async def search_image(
         .cte("data")
     )
 
+    distance = Images.embedding.cosine_distance(literal_column("vt"))
+
+    current_date = func.current_date()
+    days_old = func.extract('day', current_date - Images.uploaded_at)
+    time_weight = (1.0 - func.least(days_old / 30.0, 1.0)) * 0.07
+
     search_stmt = (
         select(
             Images.id,
@@ -43,11 +49,12 @@ async def search_image(
             Images.uploader,
             Images.uploaded_at,
             Images.updated_at,
-            Images.embedding.cosine_distance(literal_column("vt")).label("distance"),
+            distance.label("distance"),
+            (distance - (time_weight * distance)).label("combined_score")
         )
         .select_from(Images)
         .join(query_vector_cte, literal(1) == literal(1))
-        .order_by(Images.embedding.cosine_distance(literal_column("vt")))
+        .order_by("combined_score")
         .offset(offset)
         .limit(items_per_page)
     )
