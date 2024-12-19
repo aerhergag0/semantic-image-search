@@ -14,12 +14,21 @@ app.include_router(search)
 app.include_router(upload)
 app.include_router(report)
 
+origins = [
+    settings.FRONTEND_URL,
+    settings.BACKEND_URL,
+    settings.DEV_BACKEND_URL,
+    settings.DEV_FRONTEND_URL,
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.origins,
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=3600,
 )
 
 
