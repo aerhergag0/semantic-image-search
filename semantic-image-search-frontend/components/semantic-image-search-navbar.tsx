@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import {Button} from "@nextui-org/button";
-import {ImageUp, MenuIcon, Search} from "lucide-react";
+import {ImageUp, LogIn, LogOut, MenuIcon, Search} from "lucide-react";
 import {
     Navbar,
     NavbarBrand,
@@ -12,13 +12,16 @@ import {
     NavbarMenuItem,
     NavbarMenuToggle
 } from "@nextui-org/navbar";
-import React from "react";
-import {usePathname} from "next/navigation";
+import React, {useState} from "react";
+import {usePathname, useRouter} from "next/navigation";
 import Image from "next/image";
+import {useUser} from "@/context/user-context";
 
 export default function SemanticImageSearchNavbar() {
 
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const {user, isLoading, refetchUser} = useUser();
+    const router = useRouter();
 
     const menuItems = [
         ["Main Page", "/"],
@@ -27,6 +30,25 @@ export default function SemanticImageSearchNavbar() {
     ];
 
     const currentPath = usePathname();
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('/auth/logout', {
+                method: 'POST',
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                throw new Error('Logout failed');
+            }
+
+            await refetchUser();
+            router.refresh();
+            router.push("/search")
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
 
     return (
         <Navbar
@@ -58,6 +80,26 @@ export default function SemanticImageSearchNavbar() {
                     <Link href={"/upload"}>
                         <Button startContent={<ImageUp/>}>Upload</Button>
                     </Link>
+                    {!isLoading && (
+                        user ? (
+                            <div className="flex items-center gap-4">
+                                <span className="text-white">{user.username}</span>
+                                <Button
+                                    startContent={<LogOut/>}
+                                    onClick={handleLogout}
+                                    color="danger"
+                                >
+                                    Logout
+                                </Button>
+                            </div>
+                        ) : (
+                            <Link href={"/login"}>
+                                <Button startContent={<LogIn/>} color="primary">
+                                    Login
+                                </Button>
+                            </Link>
+                        )
+                    )}
                 </NavbarItem>
             </NavbarContent>
 

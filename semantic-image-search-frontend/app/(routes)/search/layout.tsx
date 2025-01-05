@@ -1,5 +1,6 @@
 import SemanticImageSearchNavbar from "@/components/semantic-image-search-navbar";
 import {TransitionProvider} from "@/hooks/use-shared-transition";
+import {UserProvider} from "@/context/user-context";
 
 export default function SearchLayout({
     children,
@@ -8,8 +9,12 @@ export default function SearchLayout({
 }) {
     return (
         <div>
-            <SemanticImageSearchNavbar/>
-            <TransitionProvider>{children}</TransitionProvider>
+            <UserProvider>
+                <SemanticImageSearchNavbar/>
+                <TransitionProvider>
+                    {children}
+                </TransitionProvider>
+            </UserProvider>
         </div>
     )
 }

@@ -1,4 +1,5 @@
 import SemanticImageSearchNavbar from "@/components/semantic-image-search-navbar";
+import {UserProvider} from "@/context/user-context";
 
 export default function SearchPageLayout({
     children,
@@ -7,8 +8,10 @@ export default function SearchPageLayout({
 }) {
     return (
         <div>
-            <SemanticImageSearchNavbar/>
-            {children}
+            <UserProvider>
+                <SemanticImageSearchNavbar/>
+                {children}
+            </UserProvider>
         </div>
     );
 }

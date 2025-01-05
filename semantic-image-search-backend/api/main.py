@@ -1,9 +1,10 @@
 import logging
 
 from configs.pydantic_settings import settings
-from db.db import create_db_and_tables
+from db.db import create_db_and_tables, cleanup_expired_sessions
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from routers.auth import auth
 from routers.report import report
 from routers.search import search
 from routers.upload import upload
@@ -13,6 +14,7 @@ app = FastAPI(docs_url=None, redoc_url=None)
 app.include_router(search)
 app.include_router(upload)
 app.include_router(report)
+app.include_router(auth)
 
 origins = [
     settings.FRONTEND_URL,
@@ -31,7 +33,6 @@ app.add_middleware(
     max_age=3600,
 )
 
-
 logging.basicConfig()
 logger = logging.getLogger('sqlalchemy.engine')
 logger.setLevel(logging.DEBUG)
@@ -41,6 +42,7 @@ logger.setLevel(logging.DEBUG)
 def on_startup():
     logging.info("The application is starting up.")
     create_db_and_tables()
+    cleanup_expired_sessions()
     load_transformers_models()
 
 

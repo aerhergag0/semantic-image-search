@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional, Any
 
 from pgvector.sqlalchemy import Vector
+from pydantic import BaseModel
 from sqlalchemy import DateTime, Index, Column, func
 from sqlmodel import SQLModel, Field, Enum
 
@@ -79,3 +80,23 @@ class Reports(SQLModel, table=True):
     resolved_at: Optional[datetime] = Field(
         sa_column=Column(DateTime(), onupdate=func.now())
     )
+
+
+class User(SQLModel, table=True):
+    id: int = Field(primary_key=True)
+    username: str = Field(unique=True, index=True)
+    password_hash: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class UserSession(SQLModel, table=True):
+    id: int = Field(primary_key=True)
+    session_id: str = Field(unique=True, index=True)
+    user_id: int = Field(foreign_key="user.id")
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    expires_at: datetime
+
+
+class UserCreate(BaseModel):
+    username: str
+    password: str

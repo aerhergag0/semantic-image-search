@@ -26,11 +26,6 @@ export default function LandingHero() {
             </div>
             <div className={"text-sm sm:text-base text-gray-400 mt-12"}>
                 <p>This site was created for educational purposes.</p>
-                <p>This site was created based on the following site: <a href="https://semantic-image-search.vercel.app"
-                                                                         className={"text-blue-300 underline"}
-                                                                         target="_blank"
-                                                                         rel="noopener noreferrer">https://semantic-image-search.vercel.app</a>
-                </p>
             </div>
         </div>
     );
