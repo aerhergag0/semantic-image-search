@@ -61,8 +61,8 @@ export function ImageCard({
                 </p>
             </div>
             {(1 - image.distance) < 0.26 ?
-                <div className={"p-2"}>
-                    <Chip color={"warning"}>Low Similarity</Chip>
+                <div className="absolute top-2 left-2 z-20">
+                    <Chip color="warning">Low Similarity</Chip>
                 </div>
                 : null}
         </Card>

@@ -4,11 +4,12 @@ from io import BytesIO
 import requests
 from PIL import Image
 from db.db import get_db_session
-from db.models import Images
+from db.models import Images, User
 from fastapi import APIRouter, UploadFile, Depends, Form, HTTPException
 from fastapi.responses import JSONResponse
 from sqlmodel import Session
 from utils.load_models import load_transformers_models
+from utils.user_session import validate_session
 
 upload = APIRouter(prefix="/upload", tags=["upload"])
 
@@ -24,6 +25,7 @@ async def file_upload(
         file_name: str = Form(...),
         link: str = Form(...),
         description: str = Form(...),
+        current_user: User = Depends(validate_session),
         models=Depends(load_transformers_models),
         session: Session = Depends(get_db_session),
 ):
@@ -78,7 +80,7 @@ async def file_upload(
             embedding=img_embeddings,
             link=link,
             description=description,
-            uploader="Guest",
+            uploader=current_user.username,
         )
     ]
 
