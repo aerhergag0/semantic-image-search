@@ -6,6 +6,7 @@ import {BACKEND_API_BASE_URL} from "@/constants";
 import {ImageSearchData} from "@/components/image-search";
 import {Button} from "@nextui-org/button";
 import {SubmitHandler, useForm} from "react-hook-form";
+import {Siren} from "lucide-react";
 
 
 type ReportData = {
@@ -17,9 +18,10 @@ type ReportData = {
 interface ReportFormProps {
     onSubmit?: (data: ReportData) => Promise<any>;
     imageData: ImageSearchData
+    onClose: () => void;
 }
 
-export default function ReportForm({imageData}: ReportFormProps) {
+export default function ReportForm({imageData, onClose}: ReportFormProps) {
 
     const [reportCategory, setReportCategory] = useState<string>('');
     const [touched, setTouched] = useState(false);
@@ -75,38 +77,56 @@ export default function ReportForm({imageData}: ReportFormProps) {
 
     return (
         <form
+            className="space-y-4"
             onSubmit={handleSubmit(onSubmit)}
         >
-            <div id="report-form" className="mt-6 bg-gray-100 p-4 rounded-lg focus:outline-none">
-                <h2 className="font-semibold text-gray-800 mb-2">Report Image</h2>
+            <div className="flex items-center gap-2 mb-4">
+                <Siren className="w-5 h-5 text-red-500"/>
+                <h2 className="text-lg font-semibold text-gray-800">Report Image</h2>
+            </div>
 
-                <Select {...register("category", {required: "true"})}
-                        items={categories}
-                        className="max-w-ws"
-                        variant={"bordered"}
-                        errorMessage={isValid || !touched ? "" : "신고 유형을 선택해야 합니다."}
-                        isRequired
-                        isInvalid={!(isValid || !touched)}
-                        onClose={() => setTouched(true)}
-                        onSelectionChange={(value) => setReportCategory(value.toString)}
-                        label=" "
-                        labelPlacement="outside"
-                >
-                    {(category) => <SelectItem key={category.key}>{category.label}</SelectItem>}
-                </Select>
+            <div className="space-y-4">
+                <div>
+                    <Select {...register("category", {required: "true"})}
+                            items={categories}
+                            className="max-w-md"
+                            variant={"bordered"}
+                            errorMessage={isValid || !touched ? "" : "신고 유형을 선택해야 합니다."}
+                            isRequired
+                            isInvalid={!(isValid || !touched)}
+                            onClose={() => setTouched(true)}
+                            onSelectionChange={(value) => setReportCategory(value.toString)}
+                            label=" "
+                            labelPlacement="outside"
+                    >
+                        {(category) => <SelectItem key={category.key}>{category.label}</SelectItem>}
+                    </Select>
+                </div>
 
-                <Textarea {...register("reportReason", {})}
-                          variant={"faded"}
-                          placeholder="Enter the reason for reporting this image"
-                          className="mb-4 mt-2 focus:outline-none focus:ring-2 focus:ring-red-600"
-                />
-                <Button color="danger"
-                        type="submit"
-                        disabled={!isValid}
-                        isLoading={isSubmitting}
-                        className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
-                    Submit Report
-                </Button>
+                <div>
+                    <Textarea {...register("reportReason", {})}
+                              variant={"bordered"}
+                              placeholder="Enter the reason for reporting this image"
+                              className="w-full"
+                    />
+                </div>
+
+                <div className="flex justify-end gap-2">
+                    <Button
+                        color="danger"
+                        variant="light"
+                        onPress={onClose}
+                    >
+                        Cancel
+                    </Button>
+                    <Button color="danger"
+                            type="submit"
+                            disabled={!isValid}
+                            isLoading={isSubmitting}
+                            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                        Submit Report
+                    </Button>
+                </div>
             </div>
         </form>
     );
