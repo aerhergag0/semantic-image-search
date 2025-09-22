@@ -22,7 +22,9 @@ export async function middleware(request: NextRequest) {
     }
 
     try {
-        const response = await fetch(`/auth/me`, {
+        // 백엔드 API URL 구성 (환경 변수 또는 기본값 사용)
+        const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL || 'http://localhost:8000'
+        const response = await fetch(`${apiUrl}/auth/me`, {
             headers: {
                 Cookie: `session_id=${sessionId.value}`
             }
