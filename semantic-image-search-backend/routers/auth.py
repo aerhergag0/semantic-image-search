@@ -4,10 +4,10 @@ from typing import Optional
 
 from db.db import get_db_session
 from db.models import User, UserSession
-from fastapi import APIRouter, Depends, Response, Cookie, Form
+from fastapi import APIRouter, Depends, Response, Cookie, Form, HTTPException
 from fastapi.responses import JSONResponse
 from passlib.context import CryptContext
-from sqlmodel import Session, select
+from sqlmodel import Session as DBSession, select
 
 auth = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -22,15 +22,15 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def create_session(user_id: int, session: Session) -> str:
+def create_session(user_id: int, session: DBSession) -> str:
     existing_sessions = session.exec(
-        select(Session).where(Session.user_id == user_id)
+        select(UserSession).where(UserSession.user_id == user_id)
     ).all()
     for existing_session in existing_sessions:
         session.delete(existing_session)
 
     session_id = secrets.token_urlsafe(32)
-    db_session = Session(
+    db_session = UserSession(
         session_id=session_id,
         user_id=user_id,
         expires_at=datetime.utcnow() + timedelta(days=1)
@@ -42,37 +42,31 @@ def create_session(user_id: int, session: Session) -> str:
 
 async def get_current_user(
         session_id: Optional[str] = Cookie(None),
-        db: Session = Depends(get_db_session)
+        db: DBSession = Depends(get_db_session)
 ) -> User:
     if not session_id:
-        return JSONResponse(
+        raise HTTPException(
             status_code=401,
-            content={
-                "message": "Not authenticated"
-            }
+            detail="Not authenticated"
         )
 
     db_session = db.exec(
-        select(Session)
-        .where(Session.session_id == session_id)
-        .where(Session.expires_at > datetime.utcnow())
+        select(UserSession)
+        .where(UserSession.session_id == session_id)
+        .where(UserSession.expires_at > datetime.utcnow())
     ).first()
 
     if not db_session:
-        return JSONResponse(
+        raise HTTPException(
             status_code=401,
-            content={
-                "message": "Session expired or invalid"
-            }
+            detail="Session expired or invalid"
         )
 
     user = db.exec(select(User).where(User.id == db_session.user_id)).first()
     if not user:
-        return JSONResponse(
+        raise HTTPException(
             status_code=401,
-            content={
-                "message": "User not found"
-            }
+            detail="User not found"
         )
 
     return user
@@ -82,7 +76,7 @@ async def get_current_user(
 async def register(
         username: str = Form(...),
         password: str = Form(...),
-        session: Session = Depends(get_db_session)
+        session: DBSession = Depends(get_db_session)
 ):
     existing_user = session.exec(
         select(User).where(User.username == username)
@@ -116,7 +110,7 @@ async def login(
         username: str = Form(...),
         password: str = Form(...),
         remember_me: bool = Form(False),
-        session: Session = Depends(get_db_session)
+        session: DBSession = Depends(get_db_session)
 ):
     try:
         if not username or not password:
@@ -160,15 +154,9 @@ async def login(
             key="session_id",
             value=token,
             httponly=True,
-
-            # TODO: 개발 환경 외 해제
-            secure=False,
+            secure=False,  # 개발 환경에서는 False, 프로덕션에서는 True
             samesite="lax",
             path="/",
-
-            # secure=True,
-            # samesite="strict",
-
             max_age=session_duration.total_seconds()
         )
 
@@ -189,7 +177,7 @@ async def login(
 async def logout(
         response: Response,
         session_id: str = Cookie(None),
-        db: Session = Depends(get_db_session)
+        db: DBSession = Depends(get_db_session)
 ):
     try:
         if session_id:
@@ -201,9 +189,13 @@ async def logout(
                 db.delete(db_session)
                 db.commit()
 
-        # TODO: 개발 환경 외 해제
-        response.delete_cookie(key="session_id")
-        # response.delete_cookie(key="session_id", secure=True, httponly=True, samesite="None")
+        response.delete_cookie(
+            key="session_id", 
+            path="/",
+            secure=False,  # login과 동일하게 설정
+            httponly=True, 
+            samesite="lax"  # login과 동일하게 설정
+        )
 
         return {"message": "Successfully logged out"}
     except Exception as e:
@@ -216,7 +208,7 @@ async def logout(
 @auth.get("/me")
 async def get_current_user_info(
         session_id: Optional[str] = Cookie(None),
-        db: Session = Depends(get_db_session)
+        db: DBSession = Depends(get_db_session)
 ):
     if not session_id:
         return JSONResponse(

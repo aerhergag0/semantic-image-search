@@ -16,12 +16,7 @@ app.include_router(upload)
 app.include_router(report)
 app.include_router(auth)
 
-origins = [
-    settings.FRONTEND_URL,
-    settings.BACKEND_URL,
-    settings.DEV_BACKEND_URL,
-    settings.DEV_FRONTEND_URL,
-]
+origins = settings.origins
 
 app.add_middleware(
     CORSMiddleware,
