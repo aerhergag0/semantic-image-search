@@ -1,6 +1,6 @@
 ﻿# Semantic Image Search
 
-[https://semantic-image-search-frontend-aerhergag0s-projects.vercel.app/](https://semantic-image-search-frontend-aerhergag0s-projects.vercel.app/)
+[https://semantic-image-search-frontend-aerhergag0s-projects.vercel.app/](https://semantic-image-search-frontend-8u3tfqrbh-aerhergag0s-projects.vercel.app/)
 
 ### 소개
 
@@ -107,6 +107,7 @@ NEXT_PUBLIC_AWS_BUCKET_NAME=            // AWS 버켓 이름
 - [Vercel Examples](https://github.com/vercel/examples)
 - [Kaggle - Food Recognition Dataset](https://www.kaggle.com/datasets/awsaf49/food-recognition-2022-dataset)
 - [Unsplash Data](https://unsplash.com/data)
+
 
 
 
