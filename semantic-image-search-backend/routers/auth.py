@@ -150,21 +150,28 @@ async def login(
         session.add(db_session)
         session.commit()
 
-        response.set_cookie(
+        json_response = JSONResponse(
+            status_code=200,
+            content={
+                "message": "Successfully logged in",
+                "username": user.username
+            }
+        )
+        
+        json_response.set_cookie(
             key="session_id",
             value=token,
-            httponly=True,
-            secure=False,  # 개발 환경에서는 False, 프로덕션에서는 True
+            httponly=False,
+            secure=False,
             samesite="lax",
             path="/",
-            max_age=session_duration.total_seconds()
+            max_age=int(session_duration.total_seconds())
         )
-
-        return {
-            "message": "Successfully logged in"
-        }
+        
+        return json_response
 
     except Exception as e:
+        session.rollback()
         return JSONResponse(
             status_code=500,
             content={

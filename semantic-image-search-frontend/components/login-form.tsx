@@ -29,6 +29,7 @@ export default function LoginForm() {
       });
 
       if (response.ok) {
+        await response.json(); // 응답 본문 소비
         const callbackUrl = searchParams.get('callbackUrl');
         router.push(callbackUrl || '/search');
       } else {
